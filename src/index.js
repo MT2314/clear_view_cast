@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { createRoot } from "react-dom/client";
 import {
   createBrowserRouter,
@@ -5,6 +6,7 @@ import {
   NavLink,
   useLocation,
   useOutlet,
+  Outlet,
 } from "react-router-dom";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import { Container, Navbar, Nav } from "react-bootstrap";
@@ -14,38 +16,34 @@ import routes from "./routes";
 
 // Navigation
 export const Navigation = () => {
+  const [tempCity, setTempCity] = useState();
+  const [city, setCity] = useState("toronto");
+
   const location = useLocation();
   const currentOutlet = useOutlet();
   const { nodeRef } =
     routes.find((route) => route.path === location.pathname) ?? {};
   return (
     <>
-      <Navbar
-        collapseOnSelect
-        expand="lg"
-        bg="dark"
-        variant="dark"
-        className="nav-bar"
-      >
-        <Navbar.Toggle aria-controls="responsive-navbar-nav " />
-        <Navbar.Collapse id="responsive-navbar-nav ">
-          <Nav className="me-auto nav-item">
-            {routes.map((route) => (
-              <Nav.Link
-                key={route.path}
-                as={NavLink}
-                to={route.path}
-                className={({ isActive }) =>
-                  isActive ? "active nav-item" : "nav-item"
-                }
-                end
-              >
-                {route.name}
-              </Nav.Link>
-            ))}
-          </Nav>
-        </Navbar.Collapse>
-      </Navbar>
+      <div id="sidebar">
+        <div className="search-form">
+          <label htmlFor="search"> Search cities:</label>
+          <form onSubmit={() => setCity(tempCity)}>
+            <input
+              className={city ? "loading" : ""}
+              aria-label="Search cities"
+              placeholder="Search"
+              type="search"
+              name="search"
+              value={tempCity}
+              onChange={(e) => setTempCity(e.target.value)}
+            />
+            <button type="submit">Submit</button>
+            <div id="search-spinner" aria-hidden hidden={!city} />
+            <div className="sr-only" aria-live="polite"></div>
+          </form>
+        </div>
+      </div>
       <div className="App">
         <Container className="container" fluid>
           <SwitchTransition>
@@ -56,11 +54,14 @@ export const Navigation = () => {
               classNames="page"
               unmountOnExit
             >
-              {(state) => (
-                <div ref={nodeRef} className="page">
-                  {currentOutlet}
-                </div>
-              )}
+              {(state) => {
+                console.log(state);
+                return (
+                  <div ref={nodeRef} className="page">
+                    {currentOutlet}
+                  </div>
+                );
+              }}
             </CSSTransition>
           </SwitchTransition>
         </Container>

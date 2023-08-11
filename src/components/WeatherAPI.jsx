@@ -19,7 +19,7 @@ const WeatherAPI = ({city = "toronto"}) => {
 
 
   return (
-    <div className="App">
+    <div id="city" className="App">
       {weatherData ? (
         <Weather
           city={weatherData.city}
