@@ -3,13 +3,11 @@ import { createRoot } from "react-dom/client";
 import {
   createBrowserRouter,
   RouterProvider,
-  NavLink,
   useLocation,
   useOutlet,
-  Outlet,
 } from "react-router-dom";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
-import { Container, Navbar, Nav } from "react-bootstrap";
+import { Container} from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./index.scss";
 import routes from "./routes";
@@ -54,14 +52,11 @@ export const Navigation = () => {
               classNames="page"
               unmountOnExit
             >
-              {(state) => {
-                console.log(state);
-                return (
-                  <div ref={nodeRef} className="page">
-                    {currentOutlet}
-                  </div>
-                );
-              }}
+              {(state) => (
+                <div ref={nodeRef} className="page">
+                  {currentOutlet}
+                </div>
+              )}
             </CSSTransition>
           </SwitchTransition>
         </Container>
